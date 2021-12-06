@@ -149,7 +149,7 @@ int* findNextSet(int* array, int ballsNumber) { // for "Balls" task
 
 int runBallsTask() {
 	int ballsNumber, * array;
-	cout << "\nEnter the number of balls:\n";
+	cout << "\nEnter the number of balls or 0 to interrupt the task:\n";
 	ballsNumber = initializeInteger("notnegative", 0, 0);
 	if (ballsNumber == 0) {
 		cout << "\nThe task was interrupted by user.\n";
@@ -206,23 +206,70 @@ void runStructuralNumbersTask() {
 	}
 }
 
-void f1() {
-	
+int runSubtaskFirst() {
+	cout << "\nEnter the cost of the spinner base:\n";
+	int baseCost = initializeInteger("positive", 0, 0);
+	cout << "\nEnter the cost of the spinner blade:\n";
+	int bladeCost = initializeInteger("positive", 0, 0);
+	cout << "\nEnter the maximum cost of the spinner:\n";
+	int maxCost = initializeInteger("positive", 0, 0);
+	if (baseCost > maxCost) {
+		cout << "\nBase cost can't be bigger than the maximum cost.\n"
+			"None of the spinners'll be sold.\n";
+		return 0;
+	}
+	int bladesNumber = (maxCost - baseCost) / bladeCost;
+	cout << "\nThe maximum number of blades is " << bladesNumber << ".\n";
+	return 1;
 }
 
-void f2() {
+int runSubtaskSecond() {
+	cout << "\nEnter the number of the spinner blades:\n";
+	int bladesNumber = initializeInteger("all", 3, numeric_limits<int>::max());
+	if (bladesNumber % 3 == 0)	{
+		cout << "\nThe number of spinners with 3 blades is " 
+			<< bladesNumber / 3 << ".\n";
+		cout << "\nThe number of spinners with 4 blades is 0.\n";
+		return 1;
+	}
+	else if (bladesNumber % 4 == 0) {
+		cout << "\nThe number of spinners with 3 blades is 0.\n";
+		cout << "\nThe number of spinners with 4 blades is " 
+			<< bladesNumber / 4 << ".\n";
+		return 1;
+	}
+	else {
+		int n = 1; // the number of 3 blades spinners
+		while (bladesNumber > 0) {
+			if ((bladesNumber - 3 * n) < 0) {
+				cout << "\nIt's impossible to produce spinners with the condition "
+					"that the total number of blades is " << bladesNumber << ".\n"
+					"0\n0\n";
+				return 0;
+			}
+			else if ((bladesNumber - 3 * n) % 4 == 0) {
+				cout << "\nThe number of spinners with 3 blades is " 
+					<< n << ".\n";
+				cout << "\nThe number of spinners with 4 blades is "
+					<< (bladesNumber - 3 * n) / 4 << ".\n";
+				return 1;
+			}
+			else {
+				n++;
+			}
+		}
+	}
+}
+
+void runSubtaskThird() {
 
 }
 
-void f3() {
+void runSubtaskFourth() {
 
 }
 
-void f4() {
-
-}
-
-void f5() {
+void runSubtaskFifth() {
 
 }
 
@@ -249,19 +296,19 @@ int main() {
 			while (chooseSubtask > 0) {
 				switch (chooseSubtask) {
 				case 1:
-					f1();
+					runSubtaskFirst();
 					break;
 				case 2:
-					f2();
+					runSubtaskSecond();
 					break;
 				case 3:
-					f3();
+					runSubtaskThird();
 					break;
 				case 4:
-					f4();
+					runSubtaskFourth();
 					break;
 				case 5:
-					f5();
+					runSubtaskFifth();
 					break;
 				default:
 					cout << "\nEntered task number is incorrect, try again.\n"
