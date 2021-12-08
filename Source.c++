@@ -14,7 +14,7 @@
 
 using namespace std;
 
-//function that check type error or "border crossing"
+//function checks type error or 'border crossing'
 int initializeInteger(string path, int lowerBound, int upperBound) {
 	bool isCorrect = false;
 	int temporaryVariable;
@@ -62,7 +62,7 @@ int initializeInteger(string path, int lowerBound, int upperBound) {
 	return temporaryVariable;
 }
 
-// function that check type error or "border crossing"
+// function checks type error or 'border crossing'
 double initializeDouble(string path, double lowerBound, double upperBound) {
 	bool isCorrect = false;
 	double temporaryVariable;
@@ -113,6 +113,7 @@ double initializeDouble(string path, double lowerBound, double upperBound) {
 }
 
 bool isInterrupted(int a) {
+	// this function checks the interruption of the task by user entering 0
 	if (a == 0) {
 		cout << "\nThe task was interrupted by user.\n";
 		return true;
@@ -123,6 +124,7 @@ bool isInterrupted(int a) {
 }
 
 int countFactorial(int value) {
+	// this function counts factorial using recursive algorithm
 	if (value > 2) {
 		return value * countFactorial(value - 1);
 	}
@@ -132,6 +134,7 @@ int countFactorial(int value) {
 }
 
 void doReswap(int* array, int i, int j) { // for "Balls" task
+	// this function is the same as built-in swap() function
 	int swapVariable = array[i];
 	array[i] = array[j];
 	array[j] = swapVariable;
@@ -166,9 +169,11 @@ int runBallsTask() {
 		return 0;
 	}
 	array = new int[ballsNumber];
+	// filling the array by the balls numbers:
 	for (size_t i = 0; i < ballsNumber; i++) {
 		array[i] = i + 1;
 	}
+	// the number of suitable combinations:
 	long long result = 1;
 	while (findNextSet(array, ballsNumber)) {
 		for (size_t i = 0; i <= ballsNumber; i++) {
@@ -183,6 +188,7 @@ int runBallsTask() {
 }
 
 int findFibonacciNumber(int n) {
+	// function that finds nth Fibonacci number using recursive algorithm
 	if (n < 3) {
 		return 1;
 	}
@@ -199,6 +205,7 @@ int runStructuralNumbersTask() {
 		return 0;
 	}
 	int number = findFibonacciNumber(position);
+	// pretty outout:
 	switch (position) {
 	case 1:
 		cout << "\nThe 1st Fibonacci number is " << number << ".\n";
@@ -224,6 +231,7 @@ int runSubtaskFirst() {
 	int bladeCost = initializeInteger("positive", 0, 0);
 	cout << "\nEnter the maximum cost of the spinner:\n";
 	int maxCost = initializeInteger("positive", 0, 0);
+	// error check:
 	if (baseCost > maxCost) {
 		cout << "\nBase cost can't be bigger than the maximum cost.\n"
 			"None of the spinners'll be sold.\n";
@@ -252,6 +260,8 @@ int runSubtaskSecond() {
 	else {
 		int n = 1; // the number of 3 blades spinners
 		while (bladesNumber > 0) {
+			// if there are extra blades and it's impossible 
+			//to produce an integer number of spinners:
 			if ((bladesNumber - 3 * n) < 0) {
 				cout << "\nIt's impossible to produce spinners with the condition "
 					"that the total number of blades is " << bladesNumber << ".\n"
@@ -277,11 +287,13 @@ void runSubtaskThird() {
 	int length = initializeInteger("positive", 0, 0);
 	cout << "\nEnter the width of rectangle:\n";
 	int width = initializeInteger("positive", 0, 0);
+	// combinatorial formula:
 	cout << "\nThe number of possible cut rectangles is "
 		<< length * (length + 1) * width * (width + 1) / 4 << ".\n";
 }
 
 int runSubtaskFourth() {
+	int compartmentsNumber = 9;
 	int bigCompartments[9][4];
 	int smallCompartments[9][2];
 	cout << "\nEnter 0 to interrupt the subtask.";
@@ -296,6 +308,7 @@ int runSubtaskFourth() {
 		if (isInterrupted(position)) {
 			return 0;
 		}
+		// filling arrays according to the scheme of places:
 		else if (position < 37) {
 			bigCompartments[(position - 1) / 4][(position - 1) % 4] = 1;
 		}
@@ -303,8 +316,9 @@ int runSubtaskFourth() {
 			smallCompartments[(position - 37) / 2][(position - 37) % 2] = 1;
 		}
 	}
-	for (size_t i = 0, j = 9 - 1; i < j; ++i, --j)
-	{
+	// mirror rearrangement of small compartments array elements 
+	// to match the train car pattern:
+	for (size_t i = 0, j = compartmentsNumber - 1; i < j; ++i, --j) {
 		for (size_t k = 0, t = 1; k < 2; ++k, --t)
 		{
 			int swapVariable = smallCompartments[i][k];
@@ -312,8 +326,9 @@ int runSubtaskFourth() {
 			smallCompartments[j][t] = swapVariable;
 		}
 	}
+	// number of free compartments running in a row:
 	int numberOfConsecutive = 0, maxnumberOfConsecutive = 0;
-	for (size_t i = 0; i < 9; i++) {
+	for (size_t i = 0; i < compartmentsNumber; i++) {
 		int sum = 0;
 		for (size_t j = 0; j < 4; j++) {
 			if (bigCompartments[i][j] == 1) {
@@ -325,6 +340,8 @@ int runSubtaskFourth() {
 				sum++;
 			}
 		}
+		// the whole compartment is free only if 
+		// the summary number of it's available seats is 6:
 		if (sum == 6) {
 			numberOfConsecutive++;
 		}
@@ -343,43 +360,55 @@ int runSubtaskFourth() {
 int runSubtaskFifth() {
 	cout << "\nEnter 0 to interrupt the subtask.";
 	cout << "\nEnter the number of the available seats:\n";
-	int N = initializeInteger("notnegative", 0, 0);
-	if (isInterrupted(N)) {
+	int seatsNumberMax = initializeInteger("notnegative", 0, 0);
+	if (isInterrupted(seatsNumberMax)) {
 		return 0;
 	}
-	int initialValueN = N;
+	// remembering the initial value of available seats:
+	int seatsNumberInitial = seatsNumberMax;
 	cout << "\nEnter the number of students "
 		"(not more than the number of the available seats): \n";
-	int K = initializeInteger("notnegative", 0, 0);
-	if (isInterrupted(K) || K > N) {
+	int studentsNumber = initializeInteger("notnegative", 0, 0);
+	if (isInterrupted(studentsNumber) || studentsNumber > seatsNumberMax) {
 		return 0;
 	}
-	int* seatsList = new int[N] { 0 };
-	int index_N = (N - 1) / 2;
-	for (size_t i = 1; i <= K; i++) {
-		seatsList[index_N] = i;
-		N = -1; // max number of consecutive seats
-		index_N = -1;
-		int new_N = 0;
-		for (size_t j = 0; j < initialValueN; j++) {
-			if (seatsList[j] == 0 && j != initialValueN - 1) {
-				new_N++;
+	// array, which shows the position of each student:
+	// 0 - free seat
+	// 1 - 9 - the seat was taken by the student with appropriate number
+	int* seatsList = new int[seatsNumberMax] { 0 };
+	// the position of the next student (in the middle):
+	int middleIndex = (seatsNumberMax - 1) / 2;
+	// iteration per each student (as if they take turns entering the room):
+	for (size_t i = 1; i <= studentsNumber; i++) {
+		// "new student is sitting down" in place, defined before:
+		seatsList[middleIndex] = i; 
+		seatsNumberMax = -1; // max number of consecutive available seats
+		middleIndex = -1;
+		// intermediate value of the max possible number of seats:
+		int seatsNumberIntermediate = 0;
+		// iteration per seats to calculate 
+		// the middle seat index for next student:
+		for (size_t j = 0; j < seatsNumberInitial; j++) {
+			if (seatsList[j] == 0 && j != seatsNumberInitial - 1) {
+				seatsNumberIntermediate++;
 			}
 			else {
-				if (seatsList[j] == 0 && j == initialValueN - 1) {
-					new_N++;
+				if (seatsList[j] == 0 && j == seatsNumberInitial - 1) {
+					seatsNumberIntermediate++;
 				}
-				if (new_N > N) {
-					N = new_N;
-					index_N = ((j - N + 1) + j) / 2; // (индекс начального + индекс конечного) / 2
+				if (seatsNumberIntermediate > seatsNumberMax) {
+					seatsNumberMax = seatsNumberIntermediate;
+					// middle is (index of the first + index of the last) / 2:
+					middleIndex = ((j - seatsNumberMax + 1) + j) / 2;
 				}
-				new_N = 0;
+				seatsNumberIntermediate = 0;
 			}
 		}
 	}
 	int adjacentSeats = 0;
-	size_t i = 0, j = initialValueN - 1;
-	while (seatsList[i] != K) {
+	size_t i = 0, j = seatsNumberInitial - 1;
+	// calculating the number of free seats on the left side:
+	while (seatsList[i] != studentsNumber) {
 		if (seatsList[i] == 0) {
 			adjacentSeats++;
 		}
@@ -391,7 +420,8 @@ int runSubtaskFifth() {
 	cout << "\nThe number of seats in the left side of the last student is " 
 		<< adjacentSeats << ".";
 	adjacentSeats = 0;
-	while (seatsList[j] != K) {
+	// calculating the number of free seats on the right side:
+	while (seatsList[j] != studentsNumber) {
 		if (seatsList[j] == 0) {
 			adjacentSeats++;
 		}
