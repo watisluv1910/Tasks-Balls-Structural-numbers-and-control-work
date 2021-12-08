@@ -10,6 +10,7 @@
 #include <stdlib.h> // for rand, srand
 #include <sstream> // for switchstream
 #include <utility> // for swap
+#include <algorithm> // for sort
 
 using namespace std;
 
@@ -262,11 +263,74 @@ int runSubtaskSecond() {
 }
 
 void runSubtaskThird() {
-
+	cout << "\nEnter the length of rectangle:\n";
+	int length = initializeInteger("positive", 0, 0);
+	cout << "\nEnter the width of rectangle:\n";
+	int width = initializeInteger("positive", 0, 0);
+	cout << "\nThe number of possible cut rectangles is "
+		<< length * (length + 1) * width * (width + 1) / 4 << ".\n";
 }
 
-void runSubtaskFourth() {
-
+int runSubtaskFourth() {
+	int bigCompartments[9][4];
+	int smallCompartments[9][2];
+	cout << "\nEnter the number of available seats or "
+		"0 to interrupt the subtask:\n";
+	int freeSeats = initializeInteger("notnegative", 0, 0);
+	if (freeSeats == 0) {
+		cout << "\nThe task was interrupted by user.\n";
+		return 0;
+	}
+	cout << "\nEnter the positions of available seats or "
+		"0 to interrupt the subtask:\n";
+	for (size_t i = 0; i < freeSeats; i++) {
+		int position = initializeInteger("notnegative", 0, 0);
+		if (position == 0) {
+			cout << "\nThe task was interrupted by user.\n";
+			return 0;
+		}
+		else if (position < 37) {
+			bigCompartments[(position - 1) / 4][(position - 1) % 4] = 1;
+		}
+		else {
+			smallCompartments[(position - 37) / 2][(position - 37) % 2] = 1;
+		}
+	}
+	for (size_t i = 0, j = 9 - 1; i < j; ++i, --j)
+	{
+		for (size_t k = 0, t = 1; k < 2; ++k, --t)
+		{
+			int swapVariable = smallCompartments[i][k];
+			smallCompartments[i][k] = smallCompartments[j][t];
+			smallCompartments[j][t] = swapVariable;
+		}
+	}
+	int numberOfConsecutive = 0, maxnumberOfConsecutive = 0;
+	for (size_t i = 0; i < 9; i++) {
+		int sum = 0;
+		for (size_t j = 0; j < 4; j++) {
+			if (bigCompartments[i][j] == 1) {
+				sum++;
+			}
+		}
+		for (size_t j = 0; j < 2; j++) {
+			if (smallCompartments[i][j] == 1) {
+				sum++;
+			}
+		}
+		if (sum == 6) {
+			numberOfConsecutive++;
+		}
+		else {
+			if (numberOfConsecutive > maxnumberOfConsecutive) {
+				maxnumberOfConsecutive = numberOfConsecutive;
+			}
+			numberOfConsecutive = 0;
+		}
+	}
+	cout << "\nThe max number of consecutive available compartments is " 
+		<< maxnumberOfConsecutive << ".\n";
+	return 1;
 }
 
 void runSubtaskFifth() {
