@@ -112,6 +112,16 @@ double initializeDouble(string path, double lowerBound, double upperBound) {
 	return temporaryVariable;
 }
 
+bool isInterrupted(int a) {
+	if (a == 0) {
+		cout << "\nThe task was interrupted by user.\n";
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 int countFactorial(int value) {
 	if (value > 2) {
 		return value * countFactorial(value - 1);
@@ -152,8 +162,7 @@ int runBallsTask() {
 	int ballsNumber, * array;
 	cout << "\nEnter the number of balls or 0 to interrupt the task:\n";
 	ballsNumber = initializeInteger("notnegative", 0, 0);
-	if (ballsNumber == 0) {
-		cout << "\nThe task was interrupted by user.\n";
+	if (isInterrupted(ballsNumber)) {
 		return 0;
 	}
 	array = new int[ballsNumber];
@@ -182,15 +191,15 @@ int findFibonacciNumber(int n) {
 	}
 }
 
-void runStructuralNumbersTask() {
+int runStructuralNumbersTask() {
 	cout << "\nEnter the position of the Fibonacci number or "
 		"0 to interrupt the task:\n";
 	int position = initializeInteger("notnegative", 0, 0);
+	if (isInterrupted(position)) {
+		return 0;
+	}
 	int number = findFibonacciNumber(position);
 	switch (position) {
-	case 0:
-		cout << "\nThe task was interrupted by user.\n";
-		break;
 	case 1:
 		cout << "\nThe 1st Fibonacci number is " << number << ".\n";
 		break;
@@ -205,6 +214,7 @@ void runStructuralNumbersTask() {
 			<< number << ".\n";
 		break;
 	}
+	return 1;
 }
 
 int runSubtaskFirst() {
@@ -274,19 +284,16 @@ void runSubtaskThird() {
 int runSubtaskFourth() {
 	int bigCompartments[9][4];
 	int smallCompartments[9][2];
-	cout << "\nEnter the number of available seats or "
-		"0 to interrupt the subtask:\n";
+	cout << "\nEnter 0 to interrupt the subtask.";
+	cout << "\nEnter the number of available seats:\n";
 	int freeSeats = initializeInteger("notnegative", 0, 0);
-	if (freeSeats == 0) {
-		cout << "\nThe task was interrupted by user.\n";
+	if (isInterrupted(freeSeats)) {
 		return 0;
 	}
-	cout << "\nEnter the positions of available seats or "
-		"0 to interrupt the subtask:\n";
+	cout << "\nEnter the positions of available seats:\n";
 	for (size_t i = 0; i < freeSeats; i++) {
 		int position = initializeInteger("notnegative", 0, 0);
-		if (position == 0) {
-			cout << "\nThe task was interrupted by user.\n";
+		if (isInterrupted(position)) {
 			return 0;
 		}
 		else if (position < 37) {
@@ -333,8 +340,68 @@ int runSubtaskFourth() {
 	return 1;
 }
 
-void runSubtaskFifth() {
-
+int runSubtaskFifth() {
+	cout << "\nEnter 0 to interrupt the subtask.";
+	cout << "\nEnter the number of the available seats:\n";
+	int N = initializeInteger("notnegative", 0, 0);
+	if (isInterrupted(N)) {
+		return 0;
+	}
+	int initialValueN = N;
+	cout << "\nEnter the number of students "
+		"(not more than the number of the available seats): \n";
+	int K = initializeInteger("notnegative", 0, 0);
+	if (isInterrupted(K) || K > N) {
+		return 0;
+	}
+	int* seatsList = new int[N] { 0 };
+	int index_N = (N - 1) / 2;
+	for (size_t i = 1; i <= K; i++) {
+		seatsList[index_N] = i;
+		N = -1; // max number of consecutive seats
+		index_N = -1;
+		int new_N = 0;
+		for (size_t j = 0; j < initialValueN; j++) {
+			if (seatsList[j] == 0 && j != initialValueN - 1) {
+				new_N++;
+			}
+			else {
+				if (seatsList[j] == 0 && j == initialValueN - 1) {
+					new_N++;
+				}
+				if (new_N > N) {
+					N = new_N;
+					index_N = ((j - N + 1) + j) / 2; // (индекс начального + индекс конечного) / 2
+				}
+				new_N = 0;
+			}
+		}
+	}
+	int adjacentSeats = 0;
+	size_t i = 0, j = initialValueN - 1;
+	while (seatsList[i] != K) {
+		if (seatsList[i] == 0) {
+			adjacentSeats++;
+		}
+		else {
+			adjacentSeats = 0;
+		}
+		i++;
+	}
+	cout << "\nThe number of seats in the left side of the last student is " 
+		<< adjacentSeats << ".";
+	adjacentSeats = 0;
+	while (seatsList[j] != K) {
+		if (seatsList[j] == 0) {
+			adjacentSeats++;
+		}
+		else {
+			adjacentSeats = 0;
+		}
+		j--;
+	}
+	cout << "\nThe number of seats in the right side of the last student is "
+		<< adjacentSeats << ".\n";
 }
 
 int main() {
