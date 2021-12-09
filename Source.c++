@@ -14,7 +14,7 @@
 
 using namespace std;
 
-//function checks type error or 'border crossing'
+//function that check type error or "border crossing"
 int initializeInteger(string path, int lowerBound, int upperBound) {
 	bool isCorrect = false;
 	int temporaryVariable;
@@ -23,9 +23,18 @@ int initializeInteger(string path, int lowerBound, int upperBound) {
 		cin >> temporaryVariableString;
 		isCorrect = true;
 		for (size_t i = 0; i < 128; i++) {
-			if ((i < (int)'0' || i >(int)'9') && i != (int)'-') {
-				if (temporaryVariableString.find((char)i) != string::npos) {
-					isCorrect = false;
+			if (i < (int)'0' || i >(int)'9') {
+				if (i != (int)'-') {
+					if (temporaryVariableString.find((char)i) != string::npos) {
+						isCorrect = false;
+					}
+				}
+				else if (temporaryVariableString.find((char)i) != string::npos) {
+					if ((count(temporaryVariableString.begin(),
+						temporaryVariableString.end(), (char)i) > 1)
+						|| temporaryVariableString.length() == 1) {
+						isCorrect = false;
+					}
 				}
 			}
 		}
@@ -62,7 +71,7 @@ int initializeInteger(string path, int lowerBound, int upperBound) {
 	return temporaryVariable;
 }
 
-// function checks type error or 'border crossing'
+// function that check type error or "border crossing"
 double initializeDouble(string path, double lowerBound, double upperBound) {
 	bool isCorrect = false;
 	double temporaryVariable;
@@ -71,10 +80,18 @@ double initializeDouble(string path, double lowerBound, double upperBound) {
 		cin >> temporaryVariableString;
 		isCorrect = true;
 		for (size_t i = 0; i < 128; i++) {
-			if ((i < (int)'0' || i >(int)'9') &&
-				i != (int)'-' && i != (int)'.') {
-				if (temporaryVariableString.find((char)i) != string::npos) {
-					isCorrect = false;
+			if (i < (int)'0' || i >(int)'9') {
+				if (i != (int)'-' && i != (int)'.') {
+					if (temporaryVariableString.find((char)i) != string::npos) {
+						isCorrect = false;
+					}
+				}
+				else if (temporaryVariableString.find((char)i) != string::npos) {
+					if ((count(temporaryVariableString.begin(),
+						temporaryVariableString.end(), (char)i) > 1)
+						|| temporaryVariableString.length() == 1) {
+						isCorrect = false;
+					}
 				}
 			}
 		}
